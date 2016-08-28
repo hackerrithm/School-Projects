@@ -1,0 +1,28 @@
+/*
+------| Group Members 						|-------
+------| Andrex Reid   ID#: 1302569			|-------
+------| Kemar Galloway ID#: 1301055			|-------
+------| Module: Data Structures				|-------
+------| Module code: CMP2006				|-------
+------| Tutor: Mr. David White				|-------
+------| University of Technology, Jamaica	|-------
+
+*/
+Big O Analysis of major modules
+
+
+___________________________________________________________
+
+Function Name ____________________Efficiency/Big O_________
+___________________________________________________________|
+infixToPostFix------------------- EFFICIENCY = O(n^2)--Quadratic
+tokenAlgorithm------------------- EFFICIENCY = O(n)---Linear
+getTopOfStack-------------------- EFFICIENCY = O(n)-- Linear
+priority ------------------------ EFFICIENCY = O(1)-- Constant
+isOperator ---------------------- EFFICIENCY = O(1)-- Constant
+writeRecordToFile---------------- EFFICIENCY = O(1)-- Constant
+push ---------------------------- EFFICIENCY = O(1)-- Constant
+peek ---------------------------- EFFICIENCY = O(1)-- Constant
+pop  ---------------------------- EFFICIENCY = O(1)-- Constant
+isEmpty-------------------------- EFFICIENCY = O(1)-- Constant
+___________________________________________________________|

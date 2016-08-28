@@ -1,0 +1,569 @@
+/*
+------| Group Members 						|-------
+------| Andrex Reid   ID#: 1302569			|-------
+------| Kemar Galloway ID#: 1301055			|-------
+------| Module: Data Structures				|-------
+------| Module code: CMP2006				|-------
+------| Tutor: Mr. David White				|-------
+------| University of Technology, Jamaica	|-------
+
+*/
+
+//STACKS |----------------------------------------------------------------------------------------------------------- || 
+	
+	Algorithm Stack()
+	Creates a stack
+	Pre: Nothing
+	Post: A stack would have been created 
+	Return: Nothing
+		Allocate memory for stack
+	End Stack
+
+	Algorithm push(ref object <Generic>, val top<Generic>)
+	insert an element at the top of the stack
+	Pre: top would have to be an Generic value
+	Post: An operand or operator is added to the stack
+	Return: Nothing
+		stack-> add(object)
+		increment top
+	End push
+	
+	Algorithm peek(val top<Interger>, ref Generic<Object>)
+	Returns the element at the top of the stack without removing it from the stack
+	Pre: top has to be an integer
+	Post: 
+	Return: temp, which is the element at the top of the stack
+		If top = -1 Then
+			return empty node pointer
+
+		Declare temp as Generic
+		Generic temp <- stack->get<-top
+		return temp
+	End Generic
+	
+	Algorithm pop(val top<Interger>, ref Generic<Object>)
+	Removes an element from the top of the stack
+	Pre: top has to be an intger value
+	Post: an operator or operand is removed from the stack
+	Return: temp, which is the value at the top of the stack
+		If top = -1 Then
+			return empty node pointer
+		End If
+		Generic temp <- stack->get<-top
+		stack->remove(top)
+		decrement top
+		return temp
+	End pop
+	
+	Algorithm isEmpty(val top<Interger>)
+	Checks the stack to determine if its empty
+	Pre: val has to be an integer value
+	Post: the stack is checked to determine if its empty
+	Return: true if the stack points to the empty node pointer else false if not 
+		return (top = -1)
+	End isEmpty
+
+
+------------------------------------------------------------------ END ---------------------------------------------- ||>
+
+//FILE OPERATION |--------------------------------------------------------------------------------------------------- || 
+
+
+Algorithm writeRecordToFile(ref input <String>)
+	Writes datat to the file 
+	Pre: input must be a string 
+	Post: An element writen to the file and stored
+	Return: Nothing
+
+	Create file Calc
+		Allocate memory for file
+			open file for writing
+			write to file
+			close file
+End writeRecordToFile
+
+------------------------------------------------------------------ END ---------------------------------------------- ||>
+
+
+
+Declare stack as Stack
+Allocate memory for Stack
+
+Declare file as FileOperation
+Allocate memory for FileOperation
+
+Declare zero, one, two, three, four, 
+					five, six, seven, eight, 
+					nine,	equal, power, divide, 
+					multiply, add, subtract, decimal,
+					negate, space, mode, clear, 
+					backspace, fileStore, memory, exit as String
+
+Declare str1, str2, sAnswer as String
+Declare answer as double
+answer <- 0.0
+
+Declare equalClicked as bool
+equalClicked <- false
+
+Declare opChosen as bool
+opChosen <- false
+
+Algorithm <constructor> CalculatorUserInterface()
+
+		Alocate memory for zero 
+		zero <-"0"
+		Alocate memory for one 
+		one <-"1"
+		Alocate memory for two 
+		two <-"2"
+		Alocate memory for three 
+		three <-"3"
+		Alocate memory for four 
+		four <-"4"
+		Alocate memory for five 
+		five <-"5"
+		Alocate memory for six 
+		six <-"6"
+		Alocate memory for seven 
+		siven <-"7"
+		Alocate memory for eight 
+		eight <-"8"
+		Alocate memory for nine 
+		nine <-"9"
+		Alocate memory for addition 
+		add <-"+"
+		Alocate memory for subtraction 
+		subtract <- "-"
+		Alocate memory for mltiplication 
+		multiply <-"*"
+		Alocate memory for division 
+		divide <-"/"
+		Alocate memory for equal 
+		equal <-"="
+		Alocate memory for decimal 
+		decimal <-"."
+		Alocate memory for space 
+		space <-"space"
+		Alocate memory for mode 
+		mode <-"mode"
+		Alocate memory for memory 
+		memory <-"m"
+		Alocate memory for clear 
+		clear <-"c"
+		Alocate memory for backspace 
+		backspace <-"b"
+		Alocate memory for fileStore 
+		fileStore <-"f"
+		Alocate memory for exit 
+		exit <-"x"
+
+End CalculatorUserInterface
+
+//IS OPERATOR |------------------------------------------------------------------------------------------------------ || 
+
+
+Algorithm isOperator(val s<String>)
+	Checks to see if the user enters an operator or not
+	Pre: s has to be a string
+	Post: determines if s is an operator
+	Return: true if the string s is an operator or false if not
+	If(s="+" OR s= "-" OR s = "*" OR s = "/" OR s = "^")
+		Return true
+	Else
+		Return false
+End isOperator
+
+
+------------------------------------------------------------------ END ---------------------------------------------- ||>
+
+//PRIORITY
+
+Algorithm Priority(val exp <String>)
+	determines the level of precidence for each operator
+	Pre: exp has to be a string 
+	Post: the precidence of exp is determined
+	Return: the precidence of the string exp
+
+	Declare precidence as integer
+		precidence <- 0
+	If exp is  is "^" then 
+		precidence <- 4
+		Else If exp is "*" OR exp is "/" then
+			precidence <- 3
+			Else If exp is "+" OR exp is "-" then
+				precidence <- 2
+					Else 
+					precidence <- 1
+			End if
+		End if
+	End if
+		return precidence
+End Priority
+
+
+------------------------------------------------------------------ END ---------------------------------------------- ||>
+
+//INFIX TO POSTFIX |------------------------------------------------------------------------------------------------- || 
+
+
+Algorithm InfixToPostfix(val exp <String>)
+	Converts an infix expression to a postfix expression
+
+	Pre: exp has to be a string 
+	Post: the infix expression is converted to the correct postfix expression
+	Return: format, which is complete postfix expression of the infix expression
+
+	Declare token as String
+	Alocate memory for String
+	Declare ch as String
+	Declare format as String
+
+	While there are more tokens
+		ch <- token->NextToken
+		If ch is not an operator then
+			format <- format + ch " "
+		Else
+			While operator is not empty AND Priority(operator->peek >= priority(ch))
+				ch <- operator->pop
+			End While
+			operator->push<-ch
+		End If
+	End While
+
+	While operator is not empty
+		ch <- operator->pop
+		format <- format + ch
+	End While
+	return format
+End InfixToPostfix
+
+
+------------------------------------------------------------------ END ---------------------------------------------- ||>
+
+//TOKENS |----------------------------------------------------------------------------------------------------------- || 
+
+Algorithm tokenAlgorithm (express <String>)
+	Performs calculations based on postfix expression
+	Pre: express has to be a valid string
+	Post: operations are performed on the operands in the expression two at a time
+	Return: answer
+
+	Declare token as StringTokenizer
+	Alocate memory for StringTokenizer
+
+	Declare op1, op2, ce as double 
+	Declare c as String
+
+	While there are more tokens to be read
+		c <- tokenizer->nextToken
+			If c is "0" OR "1" OR "2" OR "3" OR "4" OR "5" OR "6" OR "7" OR "8" OR "9" Then
+			ce <- convert c to double
+			stack->push<-ce
+			Else If c =  "+"
+					op1 <- stack->pop
+					op2 <- stack->pop
+
+					stack->push(op2 + op1)
+				
+				operator->push<-c
+			Else if c = "-" then
+					op1 <- stack->pop
+					op2 <- stack->pop
+					stack->push<- op2-op1
+				
+					write e->GetMessage
+				operator->push<-c
+			Else if c = "*" then
+				
+					op1 <- stack->pop
+					op2 <- stack->pop
+					stack->push<- op2*op1
+				
+				operator->push<-c
+			Else if c = "/" then
+				
+					op1 <- stack->pop
+					op2 <- stack->pop
+					stack->push<- op2/op1
+				
+				operator->push<-c
+			Else if c = "^" then
+				
+					op1 <- stack->pop
+					op2 <- stack->pop
+					stack->push<- op2^op1
+				
+				operator->push<-c
+
+	End While
+			answer <- stack->peek
+			return answer
+End tokenAlgorithm
+
+
+------------------------------------------------------------------ END ---------------------------------------------- ||>
+
+//GET TOP OF STACK |------------------------------------------------------------------------------------------------- || 
+
+
+Algorithm getTopOfStack (express <String>)
+	Gets the operator or operand at the top of the stack
+	Pre: express must be a string 
+	Post: determines if the last element in the stack is an operator or operand
+	Return: ans
+
+	Declare token as String
+
+	Declare ce as double 
+	Declare c, ans <- empty pointer as String
+	Declare option as boolean <- false
+
+	While there are more tokens to be read
+		c <- tokenizer->nextToken
+			If c is "0" OR "1" OR "2" OR "3" OR "4" OR "5" OR "6" OR "7" OR "8" OR "9" Then
+				ce <- convert c to double
+				stack->push<-ce
+				option <- false
+			Else If (c is "+" OR  "-" OR  "*" OR  "/" OR "^" OR "." OR  )
+					ans <- c
+					operator->push<-ans
+					option <- true
+			End If
+	End While
+	If option=false then
+		answer <- stack->peek
+		ans <- convert answer to String
+	Else
+		ans <- operator->peek
+	End If
+	return ans
+End getTopOfStack
+
+------------------------------------------------------------------ END ---------------------------------------------- ||>
+
+Algorithm ActionPerformed( val ae <Generic>)
+
+	Determines each operand entered and displays to the textfield
+	Pre: ae must be a Generic value
+	Post: the type of operand is determined
+	Return: Nothing
+	String src <- ae
+
+	If src = one
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				str1 <- "1"
+			Else
+				str1 <- str1 + "1"
+			End If
+		End If
+	Else If src = two
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				str1 <- "2"
+			Else
+				str1 <- str1 + "2"
+			End If
+		End If
+	Else If src = three
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				str1 <- "3"
+			Else
+				str1 + <- "3"
+			End If
+		End If
+	Else If src = four
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				str1 <- "4"
+			Else
+				str1 + <- "4"
+			End If
+		End If
+	Else If src =  five
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				str1 <- "5"
+			Else
+				str1 <- str1 + "5"
+			End If
+		End If
+	End If
+	Else If src = six
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				str1 <- "6"
+			Else
+				str1 <- str1 + "6"
+			End If
+		End If
+	Else If src = seven
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				str1 <- "7"
+			Else
+				str1  <- str1 + "7"
+			End If
+		End If
+	Else If src = eight
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				str1 <- "8"
+			Else
+				str1 <- str1 + "8"
+			End If
+		End If
+	Else If src = nine
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				str1 <- "9"
+			Else
+				str1 <- str1 + "9"
+			End If
+		End If
+	Else If src = zero
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				str1 <- "0"
+			Else
+				str1 <- str1 + "0"
+			End If
+		End If
+	Else If src is  backspace
+		If opChosen is not true then
+			If str1 = empty node pointer then
+			Else
+				delete the last element in str1
+			End If
+	Else If src = negate
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				diplay -1 in the textfield
+			Else
+				answerField -> setText<- "-" answerField
+			End If
+		Else If opChosen is true then
+		 	answer <- convert String in answerField to double
+		 	If answer <> 0 then
+		 		str2 <- convert to string answer * -1
+		 		answerField -> setText<-str2
+		 	Endif
+	Else If src isDecimal then
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				str1 <- "0."
+				Else If str1 <> empty node pointer 
+					answerField->setText<-"Error: a point already Exist"
+			Else
+				str1 <- str1 + "."
+			End If
+		End If
+	Else If src is space then
+		If opChosen is not true then
+			If str1 = empty node pointer then
+				str1 <- empty node pointer
+				Else If str1 <> empty node pointer 
+					str1 <- str1 + " "
+				End If
+			Else
+				str1 <- str1 + "."
+		Else If opChosen is not true then
+			answerField->setText <-str1
+		Else If equlaClicked = false then
+			If opChosen = false then
+				answerField->setText<-str1
+			End If
+		
+	End If
+End ActionPerformed
+
+------------------------------------------------------------------ END ---------------------------------------------- ||>
+
+Algorithm actionPerformed(val ae <Generic>)
+	
+	Determines each operator entered and displays to the textfield
+	Pre: ae must be a Generic value
+	Post: the type of operator is determined
+	Return: Nothing
+		Sting src <- ae
+
+		If src = add Then
+			If str1=empty node pointer Then
+				write"Enter number first"
+			Else If str1 <> empty node pointer then
+				str1 <- str1 + "+"
+			End If
+		End If
+
+		If src = subtract Then
+			If str1=empty node pointer Then
+				write"Enter number first"
+			Else If str1 <> empty node pointer then
+				str1 <- str1 + "-"
+			End If
+		End If
+
+		If src = multiply Then
+			If str1=empty node pointer Then
+				write"Enter number first"
+			Else If str1 <> empty node pointer then
+				str1 <- str1 + "*"
+			End If
+		End If
+
+		If src = power Then
+			If str1=empty node pointer Then
+				write"Enter number first"
+			Else If str1 <> empty node pointer then
+				str1 <- str1 + "^"
+			End If
+		End If
+
+		If src = fileStore Then
+			If str1=empty node pointer Then
+				write"Nothing can be stored"
+			Else If str1 <> empty node pointer then
+				Declare st as String
+				st<-answerField->getText
+				file -> writeRecordToFile <-st
+			End If
+		End If
+		If src = memory Then
+			If str1=empty node pointer Then
+				write"Nothing can be converted"
+			Else If str1 <> empty node pointer then
+				str2 <-answerField->getText
+				answerField->setText<-infixToPostFix()<-str2
+				opChosen <- true
+			End If
+		End If
+		If src = equal Then
+			If str1=empty node pointer Then
+				write"Enter number first"
+			Else If str1 <> empty node pointer then
+				str2 <- answerField->getText
+				answer -> tokenAlgorthm<-str2
+				str1 <- convert answer to string
+				answerField->setText<-str1
+			End If
+		End If
+		If opChosen = false Then
+			answerField->setText<-str1
+		End If
+		If equalclicked = false Then
+			If opChosen = false
+			answerField->setText<-str1
+		End If
+		If src = exit Then
+			exit the application
+		End If
+		If src = clear Then
+			str1 <- ""
+			opChosen <- false
+			answerField->setText<-"0"
+			str2 <- ""
+		End If
+
+	End ActionPerformed
